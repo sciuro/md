@@ -1,0 +1,22 @@
+Installation Monitoring Dashboard
+
+1. Untar the installation in your webserver.
+2. Make the database and the database user.
+3. Insert de default database.
+4. Copy the default databaseconfig and change your settings
+   in /application/config/database.php
+
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'username';
+$db['default']['password'] = 'password';
+$db['default']['database'] = 'databasename';
+$db['default']['dbdriver'] = 'mysql';
+
+4. Copy and change the /application/config/config.php.
+   Change at least:
+   
+   $config['base_url']     = 'http://yoursite.local';
+
+   And make a random key:
+
+   $config['encryption_key'] = 'YOURRANDOMKEY';
