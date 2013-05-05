@@ -9,7 +9,7 @@
 	
 	<div class="row">
 
-		<div class="span10 offset1">
+		<div class="span12">
 			<div class="pagination">
 				<ul>
 					<?php if ($pagination['current'] != '1') {?>
@@ -38,12 +38,12 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Time</th>
-						<th>Group</th>
-						<th>Server</th>
-						<th>Service</th>
-						<th>Status</th>
-						<th>Message</th>
+						<th class="span2">Time</th>
+						<th class="span2">Group</th>
+						<th class="span2">Server</th>
+						<th class="span1">Service</th>
+						<th class="span1">Status</th>
+						<th class="span4">Message</th>
 					</tr>
 				</thead>
 				

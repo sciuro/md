@@ -67,4 +67,14 @@
 			return;
 		}
 		
+		public function get_services($serverid)
+		{
+			$this->db->select('service.id, service.active, status_services.status, service.name, status_services.timestamp');
+			$this->db->from('service');
+			$this->db->where('serverid', $serverid);
+			$this->db->join('status_services', 'service.id=status_services.id', 'left');
+			
+			$query = $this->db->get();
+			return $query->result_array();
+		}
     }

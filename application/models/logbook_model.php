@@ -32,7 +32,7 @@
 		
 		public function get_lastitem($serverid, $serviceid)
 		{
-			$this->db->select('logbook.status');
+			$this->db->select('logbook.status, logbook.message, logbook.timestamp');
 			$this->db->from('logbook');
 			$this->db->where('serverid', $serverid);
 			$this->db->where('serviceid', $serviceid);

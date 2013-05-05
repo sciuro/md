@@ -110,7 +110,7 @@
         
         private function check_isvalidated(){
             if(! $this->session->userdata('validated')){
-                redirect('login_view');
+                redirect('login');
             }
         }
         

@@ -1,5 +1,6 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
+
 CREATE TABLE IF NOT EXISTS `api_key` (
   `key` varchar(40) NOT NULL,
   UNIQUE KEY `key` (`key`)
@@ -14,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `logbook` (
   `message` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `timestamp` (`timestamp`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3924 ;
 
 CREATE TABLE IF NOT EXISTS `serverinfo` (
   `id` int(11) NOT NULL,
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `service` (
   `active` tinyint(1) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=940 ;
 
 CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(32) NOT NULL,
@@ -68,6 +69,29 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('proxytype', 'socks5'),
 ('proxyuser', ''),
 ('proxypassword', '');
+
+CREATE TABLE IF NOT EXISTS `stat-cpu` (
+  `id` int(11) NOT NULL,
+  `user` decimal(5,1) NOT NULL,
+  `system` decimal(5,1) NOT NULL,
+  `wait` decimal(5,1) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `stat-load` (
+  `id` int(11) NOT NULL,
+  `avg01` decimal(5,2) NOT NULL,
+  `avg05` decimal(5,2) NOT NULL,
+  `avg15` decimal(5,2) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `stat-memory` (
+  `id` int(11) NOT NULL,
+  `used` int(11) NOT NULL,
+  `swap` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `status` (
   `id` int(11) NOT NULL,
@@ -94,4 +118,3 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`username`, `password`, `fname`, `lname`, `email`) VALUES
 ('admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', '', '', '');
-

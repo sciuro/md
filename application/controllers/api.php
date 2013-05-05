@@ -141,7 +141,9 @@
 				echo "</pre>";
 			}
 
+			// In some cases the swapspace is zero, but don't exists in the array.
 			if (!isset($serverdata['monit']['platform']['swap'])) {$serverdata['monit']['platform']['swap'] = '0';}
+			
 			// Update the serverinfo.
 			$this->load->model('serverinfo_model');
 			$this->serverinfo_model->update($server['id'],
@@ -166,39 +168,67 @@
 				// Get service id number
 				$this->load->model('services_model');
 				$serviceinfo = $this->services_model->get_serviceid($server['id'], $service['name']);
-			
+				
 				// check if service is disabled.
 				if ($service['monitor'] == '0') {
 					if ($option == 'debug') {echo $server['hostname'].": Service ".$service['name']." disabled.\n";}
+					$servicestatusmsg = 'Service is set to not monitored';
 					$servicestatus = 'na';
 				} else {
+					// Check if service contains the statistical data.
+					if ($service['name'] == $serverdata['monit']['server']['localhostname']) {
+						if ($service['system']['cpu']['wait']) {
+							$this->save_stats($server['id'],
+								$service['system']['load']['avg01'],
+								$service['system']['load']['avg05'],
+								$service['system']['load']['avg15'],
+								$service['system']['cpu']['user'],
+								$service['system']['cpu']['system'],
+								$service['system']['cpu']['wait'],
+								$service['system']['memory']['kilobyte'],
+								$service['system']['swap']['kilobyte']);
+						} else {
+							$this->save_stats($server['id'],
+								$service['system']['load']['avg01'],
+								$service['system']['load']['avg05'],
+								$service['system']['load']['avg15'],
+								$service['system']['cpu']['user'],
+								$service['system']['cpu']['system'],
+								'0',
+								$service['system']['memory']['kilobyte'],
+								$service['system']['swap']['kilobyte']);
+						}
+					}
+
 					// If status = 0, then everything is ok.
 					if ($service['status'] == '0') {
 						if ($option == 'debug') {echo $server['hostname'].": Service ".$service['name']." OK\n";}
 						$servicestatus = 'ok';
+						$servicestatusmsg = 'Servicestatus changed to ok';
 					
 					// Warning for special items.
 					} elseif ($service['status'] == '2' || $service['status'] == '32768') {
 						if ($option == 'debug') {echo $server['hostname'].": Service ".$service['name']." Warning\n";}
 						if ($serverstatus != 'error') {$serverstatus = 'warning';}
 						$servicestatus = 'warning';
+						$servicestatusmsg = $service['status_message'];
 						
 					// The rest is an error.
 					} else {
 						if ($option == 'debug') {echo $server['hostname'].": Service ".$service['name']." Error\n";}
 						$serverstatus = 'error';
 						$servicestatus = 'error';
+						$servicestatusmsg = $service['status_message'];
 					}
 				}
 				// Update the servicestatus information
-				$this->save_logitem($server['id'], $serviceinfo['id'], $servicestatus, 'Servicestatus changed to '.$servicestatus);
+				$this->save_logitem($server['id'], $serviceinfo['id'], $servicestatus, $servicestatusmsg);
 				$this->services_model->update_service_status($serviceinfo['id'], $servicestatus);
 			}
 			
 			// Update the server information
 			$this->load->model('servers_model');
-			//$prevstatus = $this->servers_model->get_serverstatus($server['id']);
-			//if () {
+			
 			$this->save_logitem($server['id'], '0', $serverstatus, 'Serverstatus changed to '.$serverstatus);
 			$this->servers_model->update_server_status($server['id'], $serverstatus);
 			
@@ -212,5 +242,13 @@
 			if ((!$lastitem) || ($lastitem['status'] != $status)) {
 				$this->logbook_model->save_logitem($serverid, $serviceid, $status, $message);
 			}
+		}
+		
+		private function save_stats($serverid, $avg01, $avg05, $avg15, $user, $system, $wait, $memory, $swap)
+		{
+			$this->load->model('stats_model');
+			$this->stats_model->update_memory($serverid, $memory, $swap);
+			$this->stats_model->update_load($serverid, $avg01, $avg05, $avg15);
+			$this->stats_model->update_cpu($serverid, $user, $system, $wait);
 		}
     }

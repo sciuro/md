@@ -48,7 +48,7 @@
 					<tr>
 						<td><span class="badge"><i class="icon-question-sign icon-white"></i></span>
 					<?php } ?>
-						<a href="#" rel="tooltip" title="<?php echo $server['timestamp'].' '.$server['hostname']; ?>"><?php echo $server['name']; ?></a></td>
+						<a href="<?php echo base_url();?>servers/show/<?php echo $server['id'];?>" rel="tooltip" title="<?php echo $server['timestamp'].' '.$server['hostname']; ?>"><?php echo $server['name']; ?></a></td>
 					</tr>
 					<?php } ?>
 				</tbody>

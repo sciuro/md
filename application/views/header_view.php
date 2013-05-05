@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="Dashboard for monit servers">
         <meta name="author" content="R.P. Neeleman">
-		<?php if (strpos(uri_string(), 'servers/overview') || strpos(uri_string(), 'logbook/view') !== false ) { ?>
+		<?php if (strpos(uri_string(), 'servers/overview') !== false  || strpos(uri_string(), 'logbook/view') !== false ) { ?>
 		<meta http-equiv="refresh" content="30">
 		<?php } ?>
 
@@ -31,6 +31,10 @@
         <link rel="apple-touch-icon-precomposed" href="<?php echo base_url();?>assets/ico/apple-touch-icon-57-precomposed.png">
         <link rel="shortcut icon" href="<?php echo base_url();?>assets/ico/favicon.png">
 
+		<script src="<?php echo base_url();?>assets/jquery/jquery-latest.js"></script>
+		<script src="<?php echo base_url();?>assets/bootstrap/js/bootstrap.js"></script>
+		<script src="<?php echo base_url();?>assets/flot/jquery.flot.js"></script>
+		
     </head>
 
 <body>

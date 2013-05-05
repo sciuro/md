@@ -26,7 +26,7 @@
 		
 		public function get_servers($group, $status)
 		{
-			$this->db->select('name, status, timestamp, hostname');
+			$this->db->select('servers.id, name, status, timestamp, hostname');
 			$this->db->from('servers');
 			$this->db->where('active', '1');
 			$this->db->where('groups', $group);
@@ -143,6 +143,27 @@ order by timestamp desc
 			}
 
 			return;
+		}
+		
+		public function get_server($id)
+		{
+			$this->db->select('id, hostname, groups, name, active, type, desc');
+			$this->db->from('servers');
+			$this->db->where('id', $id);
+			
+			$query = $this->db->get();
+			return $query->row_array();
+		}
+		
+		public function get_serverinfo($id)
+		{
+			$this->db->select('id, os, kernel, cputype, cpucount, round(memory/1024/1024, 1) as memory, round(swap/1024/1024, 1) as swap, timestamp', FALSE);
+			$this->db->from('serverinfo');
+			$this->db->where('id', $id);
+			$this->db->order_by('timestamp', 'DESC');
+			
+			$query = $this->db->get();
+			return $query->row_array();
 		}
 		
     }
